@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongooseHidden = require('mongoose-hidden')();
 var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
@@ -17,7 +18,8 @@ var usuarioSchema = new Schema({
     role : { type:String, required: [true, 'El role es necesario'], default:'USER_ROLE', enum:rolesValido },
     
   });
-
+  
+  usuarioSchema.plugin(mongooseHidden, {hidden: { _id: false , password: true } });
   usuarioSchema.plugin( uniqueValidator, { message: 'El campo {PATH} debe ser unico'});
 
   // Exportar el modelo Usuario asociado al esquema usuarioEsquema

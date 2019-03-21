@@ -12,8 +12,19 @@ var usuarioController = {};
 // =======================================
 usuarioController.list = (req, res) => {
 
+    // req.query.desde =>parametro opcional
+    var desde = req.query.desde || 0;
+    desde = Number(desde); // para forzar que desde sea un numero
+
+
+    // return res.status(500).json({
+    //     desde: desde
+    // });
+
     // Usuario.find({},'campos a mostrar').exec(ejecutar la consulta)
-    Usuario.find({}, 'nombre email img role password')
+    Usuario.find({}, 'nombre email img role')
+        .skip(desde) // omitir los primeros desde registros
+        .limit(5)
         .exec( (err, usuarios) => {
 
             // error en el servidor
@@ -25,11 +36,17 @@ usuarioController.list = (req, res) => {
                 });
             }
 
-            // consulta satisfactoria de todos los usuarios
-            res.status(200).json({
-                ok: true,
-                usuarios: usuarios
-            });
+            //COnteo de Documentos
+            Usuario.estimatedDocumentCount( (err, count) =>{
+                
+                // consulta satisfactoria de todos los usuarios
+                res.status(200).json({
+                    ok: true,
+                    usuarios: usuarios,
+                    total: count
+                });
+            })
+
         });
 };// fin usuarioController.list
 

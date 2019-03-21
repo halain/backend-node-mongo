@@ -30,6 +30,11 @@ app.use(bodyParser.json());
 var appRoutes = require ('./routes/app');
 var usuarioRoute = require ('./routes/usuario');
 var loginRoute = require ('./routes/login');
+var hospitalRoute = require ('./routes/hospital');
+var medicoRoute = require ('./routes/medico');
+var busquedaRoute = require ('./routes/busqueda');
+var uploadRoute = require ('./routes/upload');
+var imageRoute = require ('./routes/imagenes');
 
 
 
@@ -49,9 +54,9 @@ var loginRoute = require ('./routes/login');
 // Otra forma
 mongoose.set('useCreateIndex', true);
 mongoose.connect('mongodb://localhost:27017/hospitalDB', { useNewUrlParser: true })
-    .then(() => {
+    .then( () => { 
         console.log("Base de datos: \x1b[32m%s\x1b[0m", " online");
-    })
+        })
     .catch((err) => {
         console.error(err);
     });
@@ -63,7 +68,12 @@ mongoose.connect('mongodb://localhost:27017/hospitalDB', { useNewUrlParser: true
  * Rutas
  */
 //middleware
+app.use('/medico',medicoRoute);
+app.use('/hospital',hospitalRoute);
 app.use('/usuario',usuarioRoute);
+app.use('/busqueda',busquedaRoute);
+app.use('/upload',uploadRoute);
+app.use('/imagenes',imageRoute);
 app.use('/login',loginRoute);
 app.use('/',appRoutes);
 
