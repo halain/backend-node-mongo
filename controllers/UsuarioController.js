@@ -5,7 +5,7 @@ var Usuario = require('../models/Usuario');
 var bcrypt = require('bcryptjs');
 var salt = bcrypt.genSaltSync(10);
 
-var usuarioController = {}; 
+var usuarioController = {};
 
 // =======================================
 // Obtener todos los usuarios
@@ -24,8 +24,8 @@ usuarioController.list = (req, res) => {
     // Usuario.find({},'campos a mostrar').exec(ejecutar la consulta)
     Usuario.find({}, 'nombre email img role')
         .skip(desde) // omitir los primeros desde registros
-        .limit(5)
-        .exec( (err, usuarios) => {
+        .limit()
+        .exec((err, usuarios) => {
 
             // error en el servidor
             if (err) {
@@ -37,8 +37,8 @@ usuarioController.list = (req, res) => {
             }
 
             //COnteo de Documentos
-            Usuario.estimatedDocumentCount( (err, count) =>{
-                
+            Usuario.estimatedDocumentCount((err, count) => {
+
                 // consulta satisfactoria de todos los usuarios
                 res.status(200).json({
                     ok: true,
@@ -48,12 +48,12 @@ usuarioController.list = (req, res) => {
             })
 
         });
-};// fin usuarioController.list
+}; // fin usuarioController.list
 
 // =======================================
 // Guardar un usuario
 // =======================================
-usuarioController.store = function (req, res)  {
+usuarioController.store = function(req, res) {
 
     var body = req.body;
 
@@ -65,7 +65,7 @@ usuarioController.store = function (req, res)  {
         role: body.role
     });
 
-    usuario.save( (err, usuarioGuardado) => {
+    usuario.save((err, usuarioGuardado) => {
 
         if (err) {
             return res.status(400).json({
@@ -82,21 +82,21 @@ usuarioController.store = function (req, res)  {
 
     });
 
-};// fin usuarioController.store
+}; // fin usuarioController.store
 
 
 // =======================================
 // Actualizar un usuario
 // =======================================
 usuarioController.update = (req, res) => {
-    
+
     // obtener parametros de la url
     var id = req.params.id;
-    
+
     // obtener data del usuario
     var body = req.body;
 
-    Usuario.findById( id, (err, usuario) => {
+    Usuario.findById(id, (err, usuario) => {
 
         // error en el servidor
         if (err) {
@@ -116,12 +116,12 @@ usuarioController.update = (req, res) => {
             });
         }
 
-        usuario.nombre = body.nombre; 
-        usuario.email = body.email; 
-        usuario.role = body.role; 
+        usuario.nombre = body.nombre;
+        usuario.email = body.email;
+        usuario.role = body.role;
 
-        usuario.save( (err, usuarioActualizado) => {
-            
+        usuario.save((err, usuarioActualizado) => {
+
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -148,11 +148,11 @@ usuarioController.update = (req, res) => {
 // Eliminar un usuario
 // =======================================
 usuarioController.delete = (req, res) => {
-    
+
     // obtener parametros de la url
     var id = req.params.id;
-        
-    Usuario.findByIdAndDelete( id, (err, usuarioBorrado) => {
+
+    Usuario.findByIdAndDelete(id, (err, usuarioBorrado) => {
 
         // error en el servidor
         if (err) {
@@ -171,13 +171,13 @@ usuarioController.delete = (req, res) => {
                 errors: { message: 'No existe un usuario con ese id' }
             });
         }
-        
-        res.status(200).json({
-                ok: true,
-                usuario: usuarioBorrado
-            });
 
+        res.status(200).json({
+            ok: true,
+            usuario: usuarioBorrado
         });
+
+    });
 
 }; // fin usuarioController.delete
 
